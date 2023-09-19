@@ -1,36 +1,35 @@
 n = int(input())
-langs =  ['X'] + input().split()
+languages =  [''] + input().split()
 nums = list(map(int, input().split()))
 
-a_stack = [0]
-b_stack = [0]
+stack_a = [0]
+stack_b = [0]
 stack = set()
-ans = {}
+ans = [''] * n
 
 for number in nums[1:]:
-    lang = langs[number]
+    language = languages[number]
 
     if number not in stack:
         stack.add(number)
-        if lang == 'A':
-            ans[number] = a_stack[-1]
-            a_stack.append(0)
-            b_stack[-1] += 1
+        if language == 'A':
+            ans[number - 1] = str(stack_a[-1])
+            stack_b[-1] += 1
+            stack_a.append(0)
 
-        elif lang == 'B':
-            ans[number] = b_stack[-1]
-            b_stack.append(0)
-            a_stack[-1] += 1
+        elif language == 'B':
+            ans[number - 1] = str(stack_b[-1])
+            stack_a[-1] += 1
+            stack_b.append(0)
 
     else:
+        if language == 'A':
+            stack_b[-1] -= 1
+            stack_a.pop()
+        elif language == 'B':
+            stack_a[-1] -= 1
+            stack_b.pop()
         stack.remove(number)
-        if lang == 'A':
-            a_stack.pop()
-            b_stack[-1] -= 1
-        elif lang == 'B':
-            b_stack.pop()
-            a_stack[-1] -= 1
 
 
-for i in range(1, n+1):
-    print(ans[i], end = ' ')
+print(' '.join(ans))
